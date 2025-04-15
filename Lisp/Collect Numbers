@@ -1,0 +1,21 @@
+;;; Collect All Numbers from a Nested Structure (Common Lisp)
+;;;
+;;; This function, `collect-numbers`, recursively walks through a potentially
+;;; deeply nested list structure `s` and returns a **flat list of all numeric values** found.
+;;;
+;;; How it works:
+;;; - If `s` is a number, it returns a one-element list containing it.
+;;; - If `s` is an atom (but not a number), it returns NIL.
+;;; - If `s` is a list, it applies itself recursively to all elements and combines the results.
+;;;
+;;; Uses `mapcan` to concatenate the lists of numbers found in substructures.
+;;;
+;;; Examples:
+;;;   (collect-numbers '(a 1 (b 2 (3 c))))  => (1 2 3)
+;;;   (collect-numbers '(x (y z)))         => NIL
+;;;   (collect-numbers 7)                  => (7)
+
+(defun collect-numbers (s)
+  (cond ((numberp s) (list s))
+        ((atom s) nil)
+        (t (mapcan #'collect-numbers s))))
