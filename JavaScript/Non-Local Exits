@@ -1,0 +1,67 @@
+;;; Shortest Path Search with Two BFS Variants (Common Lisp)
+;;;
+;;; This code defines two versions of breadth-first search (BFS) algorithms to find the
+;;; shortest path between two nodes in a directed graph, represented as an adjacency list (`net`).
+;;; Each node is associated with a list of its neighboring nodes, like: '((a b c) (b d) (c d)).
+;;;
+;;; ----------------------------------------------------------
+;;; 1. `shortest-path1`: Uses a `catch/throw` mechanism to immediately return the path
+;;;    as soon as the goal (`end`) is found.
+;;;
+;;;    - `bfs1`: Recursively explores the queue of paths.
+;;;    - `new-paths1`: Generates next steps, and `throw`s when `end` is found.
+;;;
+;;; 2. `shortest-path`: A more conventional BFS implementation that:
+;;;    - Looks one level ahead to see if the goal is directly reachable.
+;;;    - Appends new paths to the queue and continues until the goal is found.
+;;;
+;;;    - `bfs`: Core BFS logic
+;;;    - `new-paths`: Generates new paths while avoiding cycles
+;;;
+;;; Helper:
+;;; - `empty-queue-p`: Should be a function that returns true if the queue is empty
+;;;   (not defined in this snippet—expected to be `(null queue)` or similar).
+;;;
+;;; Example:
+;;;   (shortest-path 'a 'd '((a b c) (b d) (c d)))  => (a b d) or (a c d)
+;;;   (shortest-path1 'a 'd '((a b c) (b d) (c d))) => (a b d) or (a c d)
+
+(defun shortest-path1 (start end net) 
+  (catch 'path-found 
+    (bfs1 end (list (list start)) net))) 
+
+(defun bfs1 (end queue net) 
+  (if (empty-queue-p queue) 
+      nil
+    (let ((path (car queue))) 
+      (let ((node (car path))) 
+        (bfs end 
+             (append (cdr queue) 
+                     (new-paths1 path node end net)) 
+             net))))) 
+
+(defun new-paths1 (path node end net) 
+  (mapcan (lambda (n) 
+            (cond ((eql n end) (throw 'path-found (reverse (cons end path))))
+                  ((member n path) nil)
+                  (t (list (cons n path)))))
+          (cdr (assoc node net))))
+
+(defun shortest-path (start end net) 
+  (reverse (bfs end (list (list start)) net))) 
+
+(defun bfs (end queue net) 
+  (if (empty-queue-p queue) 
+      nil
+    (let* ((path (car queue))  
+           (node (car path)))
+      (if (member end (cdr (assoc node net)))
+          (cons end path)
+        (bfs end (append (cdr queue) (new-paths path node end net)) net)))))
+
+(defun new-paths (path node end net) 
+  (mapcan (lambda (n) 
+            (if (member n path)
+                nil
+              (list (cons n path))))
+          (cdr (assoc node net))))
