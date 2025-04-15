@@ -1,0 +1,20 @@
+;;; Tree Reduction Function (Common Lisp)
+;;;
+;;; This function, `reduce-tree`, recursively reduces a nested list (tree structure)
+;;; using a binary function, similar to how `reduce` works on flat lists.
+;;;
+;;; - `function`: A binary function to apply (e.g., #'+, #'max, etc.)
+;;; - `tree`: A possibly deeply nested list of atoms (e.g., '(1 (2 (3 4)) 5))
+;;; - `init`: An optional initial value to start the reduction with
+;;;
+;;; The function traverses the tree in depth-first order and applies `function`
+;;; to combine all atomic elements.
+;;;
+;;; Example:
+;;;   (reduce-tree #'+ '(1 (2 (3 4)) 5))   => 15
+;;;   (reduce-tree #'max '(1 (2 (9 4)) 5)) => 9
+
+(defun reduce-tree (function tree &optional (init nil))
+  (cond ((null tree) init) 
+        ((atom tree) (reduce function (list tree) :initial-value init))
+        (t (reduce-tree function (cdr tree) (reduce-tree function (car tree) init)))))
