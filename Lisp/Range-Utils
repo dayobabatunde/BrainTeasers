@@ -1,0 +1,66 @@
+;;; Range-Based Loop Utilities (Common Lisp)
+;;;
+;;; This set of functions provides useful abstractions for applying operations across
+;;; numeric ranges, supporting both increasing and decreasing directions.
+;;; All functions handle inclusive ranges by default (from `start` to just before `end`).
+;;;
+;;; ----------------------------------------------------------
+;;; 1. `map-range`:
+;;;    Applies a function `fn` to each number from `start` to `end - 1`, collecting results
+;;;    into a list.
+;;;
+;;;    Example:
+;;;      (map-range #'1+ 1 5) => (2 3 4 5)
+;;;
+;;; ----------------------------------------------------------
+;;; 2. `every-range`:
+;;;    Returns true if the predicate `fn` returns true for every value in the range;
+;;;    stops early if any value fails the test.
+;;;
+;;;    Example:
+;;;      (every-range #'evenp 2 6) => NIL
+;;;
+;;; ----------------------------------------------------------
+;;; 3. `find-range`:
+;;;    Returns the first value in the range for which the predicate `fn` returns true,
+;;;    or NIL if none are found.
+;;;
+;;;    Example:
+;;;      (find-range #'evenp 3 7) => 4
+;;;
+;;; ----------------------------------------------------------
+;;; 4. `reduce-range`:
+;;;    Reduces a range of numbers using a binary function `fn`, optionally starting
+;;;    from an initial value `init`.
+;;;
+;;;    Example:
+;;;      (reduce-range #'+ 1 5 0) => 10  ; 1 + 2 + 3 + 4
+;;;      (reduce-range #'* 1 5 1) => 24  ; 1 * 2 * 3 * 4
+;;;
+;;; All functions support reversed ranges (e.g., from 5 down to 1).
+
+(defun map-range (fn start end)
+  (do ((iter (if (> start end) -1 1))
+       (i start (+ i iter))
+       (lst nil (cons (funcall fn i) lst)))
+      ((= i end) (reverse lst))
+    nil))
+
+(defun every-range (fn start end)
+  (do ((iter (if (> start end) -1 1))
+       (i start (+ i iter)))
+      ((or (= i end) (not (funcall fn i))) (= i end))
+    nil))
+
+(defun find-range (fn start end)
+  (do ((iter (if (> start end) -1 1))
+       (i start (+ i iter)))
+      ((or (= i end) (funcall fn i)) (if (= i end) nil i))
+    nil))
+
+(defun reduce-range (fn start end &optional init)
+  (do ((iter (if (> start end) -1 1))
+       (i start (+ i iter))
+       (val init (funcall fn val i)))
+      ((= i end) val)
+    nil))
