@@ -1,0 +1,54 @@
+/**
+ * 📘 Basic Math and Array Utility Functions
+ *
+ * A collection of simple, reusable functions for performing basic mathematical operations,
+ * working with arrays, and checking conditions.
+ *
+ * ------------------------------------------------------------
+ * 1. sumOfSquares(x, y):
+ *    - Returns the sum of the squares of two numbers.
+ *    - Example: sumOfSquares(3, 4) => 25
+ *
+ * 2. maxOfThree(x, y, z):
+ *    - Returns the maximum of three numbers.
+ *    - Example: maxOfThree(5, 8, 2) => 8
+ *
+ * 3. isLeapYear(year):
+ *    - Returns true if the year is a leap year (Gregorian rules).
+ *    - Example: isLeapYear(2024) => true
+ *
+ * 4. allEvens(nums):
+ *    - Filters and returns only the even numbers from an array.
+ *    - Example: allEvens([1, 2, 3, 4]) => [2, 4]
+ *
+ * 5. listSquares(nums):
+ *    - Returns a new array with the squares of each number.
+ *    - Example: listSquares([1, 2, 3]) => [1, 4, 9]
+ *
+ * 6. listSum(nums):
+ *    - Returns the sum of all numbers in an array.
+ *    - Example: listSum([1, 2, 3]) => 6
+ *
+ * 7. listSquaresSum(nums):
+ *    - Returns the sum of the squares of all numbers in an array.
+ *    - Example: listSquaresSum([1, 2, 3]) => 14
+ */
+
+export const sumOfSquares = (x, y) => x * x + y * y;
+
+export const maxOfThree = (x, y, z) => Math.max(x, y, z);
+
+export const isLeapYear = (year) =>
+  (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+
+export const allEvens = (nums) =>
+  nums.filter((number) => number % 2 === 0);
+
+export const listSquares = (nums) =>
+  nums.map((number) => number * number);
+
+export const listSum = (nums) =>
+  nums.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+export const listSquaresSum = (nums) =>
+  nums.reduce((accumulator, currentValue) => accumulator + currentValue * currentValue, 0);
