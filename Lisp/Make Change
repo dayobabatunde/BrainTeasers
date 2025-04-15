@@ -1,0 +1,27 @@
+;;; Make Change Function (Common Lisp)
+;;;
+;;; This function, `make-change`, breaks down a given amount of cents into U.S. coin denominations
+;;; (or any list of coin values), returning the count of each coin needed using a greedy algorithm.
+;;;
+;;; Parameters:
+;;; - `cents`: Total amount in cents to make change for
+;;; - `coins`: (optional) List of coin denominations, default is '(25 10 5 1) for quarters, dimes, nickels, and pennies
+;;;
+;;; It processes the largest coin first and works its way down, using `floor` to calculate how many
+;;; of each coin fit into the remaining amount. It returns a list of coin counts in the same order as `coins`.
+;;;
+;;; Returns:
+;;; - A list of how many of each coin is needed to make exact change
+;;;
+;;; Example:
+;;;   (make-change 87)        => (3 1 0 2)  ; 3 quarters, 1 dime, 0 nickels, 2 pennies
+;;;   (make-change 41 '(10 1)) => (4 1)     ; 4 tens, 1 one
+
+(defun make-change (cents &optional (coins '(25 10 5 1)))
+  (let ((remainder cents)
+        (placeholder nil))
+    (values-list
+     (mapcar (lambda (coin) 
+               (multiple-value-setq (placeholder remainder)
+                 (floor remainder coin)))
+             coins))))
