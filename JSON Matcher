@@ -1,3 +1,27 @@
+/**
+ * Pattern Matching Engine
+ * -----------------------
+ * This code defines a recursive pattern matching function that can match primitive values,
+ * arrays, and objects (even nested ones), with support for variables (e.g., "?x").
+ * 
+ * The main function `match(pattern, object, bindings)` tries to match a `pattern` to a given `object`,
+ * producing all possible variable bindings that make the match succeed.
+ *
+ * Supported features:
+ * - Variables: Strings that start with "?" can match any value.
+ * - Primitive Matching: Simple values like numbers and strings must match exactly.
+ * - Object/Array Matching: Recursively compares structure and values.
+ * 
+ * Example:
+ *   match({ name: "?n", age: 30 }, { name: "Alice", age: 30 })
+ *   => [ { "?n": "Alice" } ]
+ *
+ * Useful for:
+ * - Logic programming
+ * - Rule-based systems
+ * - Querying or filtering JSON-like structures
+ */
+
 export const match = (pattern, object, bindings = [{}]) =>
   isVariable(pattern)
     ? matchVariable(pattern, object, bindings)
