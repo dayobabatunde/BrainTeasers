@@ -1,0 +1,55 @@
+;;; Utility Functions for Nested List Handling and Printing (Common Lisp)
+;;;
+;;; This file defines several basic utility functions, including:
+;;; - Finding the greater of two numbers
+;;; - Detecting sublists within a list
+;;; - Printing dot characters
+;;; - Counting occurrences of the symbol 'a'
+;;; - Summing values in a list while skipping NILs
+;;;
+;;; ----------------------------------------------------------
+
+;;; Returns the greater of two numbers
+(defun greater (x y)
+  (if (> x y)
+      x
+      y))
+
+;;; Checks if any element in a list is itself a list
+(defun has-list-p (lst)
+  (cond ((null lst) nil)
+        ((listp (car lst)) t)
+        (t (has-list-p (cdr lst)))))  ; FIXED: originally (cdr last) — typo
+
+;;; Recursively prints `x` number of dots followed by a newline
+(defun print-dots (x)
+  (cond ((= x 0) (format t "~%"))
+        (t (format t ".") (print-dots (1- x)))))
+
+;;; Iterative version of print-dots using `do` loop
+(defun print-dots (x)
+  (do ((i x (1- i)))
+      ((< i 1) (format t "~%"))
+    (format t ".")))
+
+;;; Recursively counts how many times the symbol `'a` appears in a list
+(defun get-a-count (lst)
+  (cond ((null lst) 0)
+        ((eql 'a (car lst)) (1+ (get-a-count (cdr lst))))
+        (t (get-a-count (cdr lst)))))
+
+;;; Iterative version of get-a-count using `do` loop
+(defun get-a-count (lst)
+  (do ((new-lst lst (cdr new-lst))
+       (count 0 (if (eql 'a (car new-lst)) (1+ count) count)))
+      ((null new-lst) count)))
+
+;;; Safely sums a list, skipping NIL values
+(defun summit (lst)
+  (apply #'+ (remove nil lst)))  ; FIXED: was `last`, should be `lst`
+
+;;; Recursively sums elements, skipping over NIL sublists
+(defun summit (lst)
+  (cond ((null lst) 0)
+        ((null (car lst)) (summit (cdr lst)))
+        (t (+ (car lst) (summit (cdr lst))))))  ; FIXED: missing base case for value
