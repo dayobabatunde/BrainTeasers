@@ -1,3 +1,18 @@
+;;; Longest Path Finder in a Graph (Common Lisp)
+;;;
+;;; This code defines a depth-first search algorithm to find the **longest path**
+;;; between two nodes (`start` and `end`) in a directed graph represented as an
+;;; adjacency list (`net`).
+;;;
+;;; - `longest-path`: Entry point. Returns the longest path from `start` to `end`.
+;;; - `longer-path`: Helper that returns the longer of two paths.
+;;; - `path-thru-node`: Attempts to extend a path through a specific node.
+;;; - `dfs`: Core recursive depth-first search function. Explores all paths from the
+;;;          current node to the destination, tracking the longest one found so far.
+;;;
+;;; The graph is passed as an association list where each key is a node and its value
+;;; is a list of neighbors: e.g., '((a b c) (b d) (c d e) ...)
+
 (defun longest-path (start end net)
   (or (reverse (dfs (list start) start end net nil))
       (and (eql start end) (list start))))
