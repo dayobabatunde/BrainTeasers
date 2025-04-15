@@ -1,0 +1,45 @@
+export const match = (pattern, object, bindings = [{}]) =>
+  isVariable(pattern)
+    ? matchVariable(pattern, object, bindings)
+    : isPrimitive(pattern)
+      ? matchPrimitive(pattern, object, bindings)
+      : matchObject(pattern, object, bindings);
+
+const isVariable = (pattern) => typeof pattern === "string" && pattern.startsWith("?");
+
+const isPrimitive = (pattern) => pattern !== Object(pattern);
+
+const matchVariable = (pattern, object, bindings) =>
+  bindings.flatMap(binding =>
+    pattern in binding
+      ? isEqual(binding[pattern], object)
+        ? [binding]
+        : []
+      : [{ ...binding, [pattern]: object }]
+  );
+
+const matchPrimitive = (pattern, object, bindings) => pattern === object ? bindings : [];
+
+const matchObject = (pattern, object, bindings) => sameArrayNess(pattern, object) &&
+  Object.entries(pattern).every(([key, value]) =>
+    key in object
+      ? (bindings = match(value, object[key], bindings)) && bindings.length !== 0
+      : false
+  )
+    ? bindings
+    : [];
+
+const sameArrayNess = (a, b) => Array.isArray(a) === Array.isArray(b);
+
+const isEqual = (a, b) =>
+  isPrimitive(a)
+    ? isPrimitiveEqual(a, b)
+    : isObjectEqual(a, b);
+
+const isPrimitiveEqual = (a, b) => a === b;
+
+const isObjectEqual = (a, b) => sameArrayNess(a, b) &&
+  Object.keys(a).length === Object.keys(b).length &&
+  Object.entries(a).every(([key, value]) =>
+    key in b && isEqual(value, b[key])
+  );
