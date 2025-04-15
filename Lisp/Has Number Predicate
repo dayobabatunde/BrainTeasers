@@ -1,0 +1,22 @@
+;;; Check for Numbers in a Nested Structure (Common Lisp)
+;;;
+;;; This function, `has-number-p`, checks whether a nested list structure
+;;; contains **at least one numeric value**.
+;;;
+;;; It works recursively:
+;;; - If the current element `s` is an atom, it checks if it’s a number using `numberp`.
+;;; - If it’s a list, it uses `some` to recursively check each element.
+;;;
+;;; Returns:
+;;; - `T` if any number is found anywhere in the structure.
+;;; - `NIL` otherwise.
+;;;
+;;; Examples:
+;;;   (has-number-p '(a b (c d 3)))   => T
+;;;   (has-number-p '(x y (z)))       => NIL
+;;;   (has-number-p 42)               => T
+;;;   (has-number-p '(a (b (c 5))))   => T
+
+(defun has-number-p (s)
+  (cond ((atom s) (numberp s))
+        (t (some #'has-number-p s))))
