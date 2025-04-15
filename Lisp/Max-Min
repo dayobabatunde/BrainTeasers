@@ -1,0 +1,29 @@
+;;; Find Maximum and Minimum in a Vector Slice (Common Lisp)
+;;;
+;;; This function, `max-min`, returns both the maximum and minimum values
+;;; from a given portion of a vector.
+;;;
+;;; Parameters:
+;;; - `vector`: The input vector (array) of numbers or comparable values
+;;; - `:start`: (optional) Starting index (default = 0)
+;;; - `:end`:   (optional) Ending index (default = length of vector)
+;;;
+;;; It uses a `do` loop to traverse the specified slice of the vector, comparing
+;;; each element to track the current maximum and minimum.
+;;;
+;;; Returns two values: (max, min)
+;;;
+;;; Example:
+;;;   (max-min #(3 1 9 7))           => 9, 1
+;;;   (max-min #(3 1 9 7) :start 1)  => 9, 1
+;;;   (max-min #(3 1 9 7) :start 2)  => 9, 7
+;;;   (max-min #(3 1 9 7) :start 4)  => NIL, NIL  ; empty range
+
+(defun max-min (vector &key (start 0) (end (length vector)))
+  (if (= start end)  
+      (values nil nil)
+    (do ((i start (1+ i))
+         (min (aref vector start) (min (aref vector i) min))
+         (max (aref vector start) (max (aref vector i) max)))
+        ((= i end) (values max min))
+      nil)))
