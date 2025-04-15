@@ -1,0 +1,47 @@
+;;; Pretty-Printing Lists in Lisp (Common Lisp)
+;;;
+;;; This file defines two functions for displaying Lisp lists in custom formats:
+;;; one that reveals the internal dotted pair structure, and another that prints
+;;; lists in a bracketed, readable form while preserving improper list tails.
+;;;
+;;; ----------------------------------------------------------
+;;; 1. `show-dots`:
+;;;    - Recursively prints a list in **dotted pair (cons cell)** notation.
+;;;    - Clearly shows how Lisp represents lists at a low level.
+;;;
+;;;    Example:
+;;;      (show-dots '(1 2 3))      => (1 . (2 . (3 . NIL)))
+;;;      (show-dots '(1 2 . 3))    => (1 . (2 . 3))
+;;;
+;;; ----------------------------------------------------------
+;;; 2. `show-list`:
+;;;    - Prints the list using square brackets (`[ ... ]`) for readability.
+;;;    - Proper lists print like: [1 2 3]
+;;;    - Improper lists (dotted tails) are printed like: [1 2 . 3]
+;;;
+;;;    Example:
+;;;      (show-list '(1 2 3))      => [1 2 3]
+;;;      (show-list '(1 2 . 3))    => [1 2 . 3]
+;;;
+;;; These functions are helpful for debugging or teaching how Lisp lists work under the hood.
+
+(defun show-dots (lst)
+  (cond ((atom lst) (format t "~S" lst))
+        (t (format t "(")
+           (show-dots (car lst))
+           (format t " . ")
+           (show-dots (cdr lst))
+           (format t ")"))))
+
+(defun show-list (lst)
+  (cond ((atom lst) (format t "~S" lst))
+        (t (format t "[")
+           (show-list (car lst))
+           (do ((element (cdr lst) (cdr element)))
+               ((atom element) 
+                (if (null element) 
+                    (format t "") 
+                  (format t " . ~S" element)))
+             (format t " ")
+             (show-list (car element)))
+           (format t "]"))))
