@@ -1,0 +1,15 @@
+;;; Apply a Function to Each Line in a File (Common Lisp)
+;;;
+;;; This code defines a utility function `map-file` that takes a function and a file path,
+;;; then applies the function to each line of the file.
+;;;
+;;; - `map-file`: Opens the file at `pathname` for reading, and applies `function`
+;;;               to each line using a helper function `map-stream`.
+;;; - `map-stream` is assumed to be a function that maps a given function over
+;;;                each line (or element) of the stream.
+;;;
+;;; Example use case: Counting lines, filtering content, transforming text line-by-line.
+
+(defun map-file (function pathname)
+  (with-open-file (stream pathname :direction :input)
+    (map-stream function stream)))
