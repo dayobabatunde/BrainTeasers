@@ -1,0 +1,16 @@
+;;; Destructive Multiplication Macro (Common Lisp)
+;;;
+;;; This code defines a **modify macro** named `doublef` that multiplies a place
+;;; (like a variable or array element) by a given factor **in place** (i.e., destructively).
+;;;
+;;; - `define-modify-macro`: A Common Lisp macro used to create modifying operations.
+;;; - `doublef`: Multiplies the value stored in a place by `factor` (default is 2).
+;;;
+;;; Example:
+;;;   (setq x 5)
+;;;   (doublef x)       ; => x becomes 10
+;;;   (doublef x 3)     ; => x becomes 30
+;;;
+;;; This is equivalent to using `setf` like: (setf x (* x factor))
+
+(define-modify-macro doublef (&optional (factor 2)) *)
