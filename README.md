@@ -8,5 +8,3 @@ A collection of fun and challenging coding problems, puzzles, and logic-based ex
 - Functional programming exercises
 - Short, readable solutions
 
-## 🚀 Getting Started
-Clone the repo and run any JavaScript file using Node.js:
