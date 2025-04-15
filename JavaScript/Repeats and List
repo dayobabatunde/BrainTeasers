@@ -1,0 +1,35 @@
+/**
+ * Utility Functions: Duplicate Detection and HTML List Generation
+ *
+ * 1. getRepeats(arr):
+ *    - Takes an array of values (e.g., numbers or strings)
+ *    - Returns a new array containing all elements that appear more than once
+ *    - Removes duplicates from the result so each repeated item appears only once
+ *
+ *    Example:
+ *      getRepeats([1, 2, 2, 3, 4, 4, 4])  => [2, 4]
+ *
+ * 2. makeHtmlList(list):
+ *    - Takes an array of strings
+ *    - Returns a string of an HTML unordered list (<ul>) where each item is wrapped in <li> tags
+ *    - If the list is empty, it returns an empty string
+ *
+ *    Example:
+ *      makeHtmlList(["apple", "banana"])
+ *      => "<ul><li>apple</li><li>banana</li></ul>"
+ */
+
+export const getRepeats = (arr) => {
+  const numFreq = new Map();
+  
+  for (let num of arr) {
+    numFreq.set(num, (numFreq.get(num) || 0) + 1);
+  }
+
+  return Array.from(new Set(arr.filter(num => numFreq.get(num) > 1)));
+};
+
+export const makeHtmlList = (list) => 
+  list.length 
+    ? `<ul><li>${list.join('</li><li>')}</li></ul>` 
+    : '';
